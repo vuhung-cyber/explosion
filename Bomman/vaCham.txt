@@ -1,0 +1,130 @@
+if(((temp_x < _x) && (temp_x + 30 > _x)) || ((_x <= temp_x) && (_x + 30 > temp_x)))
+    {
+        if(((temp_y < _y) && (30 + temp_y > _y)) || ((_y <= temp_y) && (_y + 30 > temp_y)))
+        {
+            //cout << "false !";
+            return false;
+        }
+    }
+
+
+
+int a1[16][16] = {0};//grobal
+int temp_x = 30;
+int temp_y = 30;
+int dem = 0;
+h_box = load_texture("box/box_main.bmp");
+    if(h_box == nullptr){
+        cout << "fail load picture" << endl;
+    }else{
+        SDL_QueryTexture(h_box, NULL, NULL, &sourceRect.w, &sourceRect.h);
+        sourceRect._x = x_source_rect;
+        sourceRect._y = y_source_rect;
+        SDL_RenderCopy(renderer_map,h_box,NULL,&sourceRect);
+    }
+
+bool va_cham(int _x, int _y)//kiểm tra va chạm giữa các vật thể với nhân vật(temp_x, temp_y)
+{
+    if(((temp_x < _x) && (temp_x + 30 > _x)) || ((_x <= temp_x) && (_x + 30 > temp_x)))
+    {
+        if(((temp_y < _y) && (30 + temp_y > _y)) || ((_y <= temp_y) && (_y + 30 > temp_y)))
+        {
+            //cout << "false !";
+            return false;
+        }
+    }
+    return true;
+}
+
+//kiểm tra giữa tọa độ nhân vật với các ô được di chuyển.
+void scan_arr(){
+    for(int i = 0 ; i<16; i++){
+        for(int j = 0; j<16; j++){
+            if(((temp_x < j*30) && (temp_x + 30 > j*30)) || ((j*30 <= temp_x) && (j*30 + 30 > temp_x)))
+            {
+                if(((temp_y < i*30) && (30 + temp_y > i*30)) || ((i*30 <= temp_y) && (i*30 + 30 > temp_y)))
+                {
+                    if(a1[i][j] == 1){
+                        dem++;
+                    }
+                }
+            }
+
+        }
+    }
+}
+
+void map_arr_0_1(){
+    //column1.apply_array();
+    for(int i=0; i<16; i++){
+        for(int j=0; j<16; j++){
+            if(i == 0 || i == 15){
+                a1[i][j] = 1;
+            }else if(j == 0 || j == 15){
+                a1[i][j] = 1;
+            }
+        }
+    }
+}
+
+
+void Move()
+{
+    temp_x = x_source_rect;
+    temp_y = y_source_rect;
+    switch(h_event.key.keysym.sym){
+        case SDLK_ESCAPE : {
+            is_running = false;
+            break;
+        }
+        case SDLK_DOWN : {
+            temp_y = y_source_rect + 10;
+
+            break;
+        }
+        case SDLK_UP : {
+            temp_y = y_source_rect - 10;
+
+            break;
+        }
+        case SDLK_LEFT : {
+            temp_x = x_source_rect - 10;
+
+            break;
+        }
+        case SDLK_RIGHT : {
+            temp_x = x_source_rect + 10;
+
+            break;
+        }
+    }
+}
+
+while(is_running){
+        if(run_game == true){
+            SDL_RenderClear(renderer_map);
+            blow_fire();
+            run_fire();
+
+            SDL_PollEvent(&h_event);
+            if(h_event.type == SDL_QUIT){
+                is_running = false;
+                break;
+            }
+            if(h_event.type == SDL_KEYDOWN){
+                dem = 0;
+                Move();
+                scan_arr();
+                if(dem == 0){
+                    x_source_rect = temp_x;
+                    y_source_rect = temp_y;
+                }
+            }
+            mouse();
+            paint_screen();
+            SDL_Delay(100);
+        }else if(run_game == false){
+            mouse();
+
+        }
+    }
