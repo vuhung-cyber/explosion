@@ -13,6 +13,8 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import bomberman.entities.*;
 import bomberman.graphics.Sprite;
@@ -89,9 +91,9 @@ public class BombermanGame extends Application {
         entities.add(bomberman);
 
        scene.setOnKeyPressed(Event->{
-
             bomberman.move(Event);
             bomberman.moving(Event.getCode());
+            bomberman.bom(Event);
         });
     }
 
@@ -128,14 +130,25 @@ public class BombermanGame extends Application {
     }
 
     public void update() {
-        entities.forEach(Entity::update);
+
+        for(int i = 0; i < entities.size(); i++)
+            entities.get(i).update();
+
+        for(int i = 0; i < explosionList.size(); i++)
+            explosionList.get(i).update();
     }
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         stillObjects.forEach(g -> g.render(gc));
-        entities.forEach(g -> g.render(gc));
+
+        for(int i = 0; i < entities.size(); i++)
+            entities.get(i).render(gc);
+
+        for(int i = 0; i < explosionList.size(); i++)
+            explosionList.get(i).render(gc);
     }
+
 }
 
 

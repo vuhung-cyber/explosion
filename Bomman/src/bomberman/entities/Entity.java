@@ -4,7 +4,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import bomberman.graphics.Sprite;
-//import javafx.scene.shape.Rectangle;
 
 import java.awt.*;
 
@@ -25,7 +24,9 @@ public abstract class Entity {
         this.img = img;
     }
 
-    protected Entity() {
+    protected Entity(int x, int y) {
+        this._x = x;
+        this._y = y;
     }
 
     public void render(GraphicsContext gc) {

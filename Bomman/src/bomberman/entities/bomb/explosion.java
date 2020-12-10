@@ -5,7 +5,7 @@ import bomberman.entities.Entity;
 import bomberman.entities.tile.Wall;
 import bomberman.graphics.Sprite;
 import javafx.scene.image.Image;
-import javafx.scene.shape.Rectangle;
+import java.awt.Rectangle;
 
 public class explosion extends Entity {
     private int left;
@@ -18,13 +18,13 @@ public class explosion extends Entity {
     private int time = 0;
 
     public explosion(int x, int y, Image image, int direction){
-        super(x, y, image);
+        super(x, y);
         this.img = image;
         this.direction = direction;
     }
 
     public explosion(int x, int y, Image image){
-        super(x, y, image);
+        super(x, y);
         this.img = image;
     }
 
@@ -85,7 +85,7 @@ public class explosion extends Entity {
 
         for(int i = 0; i < down; i++){
             explosion e = new explosion(_x, _y + size*(i + 1), img);
-            if(i == right - 1) {
+            if(i == down - 1) {
                 e.img = Sprite.explosion_vertical_down_last.getFxImage();
                 e.direction = 6;
             } else{
@@ -97,7 +97,7 @@ public class explosion extends Entity {
     }
     private void Right() {
         for (int i = 0; i < power; i++) {
-            java.awt.Rectangle ex_right = new java.awt.Rectangle(_x + size*(i + 1), _y, size, size);
+            Rectangle ex_right = new Rectangle(_x + size*(i + 1), _y, size, size);
             if (isCollisionsWall(ex_right)) {
                 right = i;
                 return;
@@ -108,7 +108,7 @@ public class explosion extends Entity {
 
     private void Left() {
         for (int i = 0; i < power; i++) {
-            java.awt.Rectangle ex_left = new java.awt.Rectangle(_x - size*(i + 1), _y, size, size);
+            Rectangle ex_left = new Rectangle(_x - size*(i + 1), _y, size, size);
             if (isCollisionsWall(ex_left)) {
                 left = i;
                 return;
@@ -119,7 +119,7 @@ public class explosion extends Entity {
 
     private void Top() {
         for (int i = 0; i < power; i++) {
-            java.awt.Rectangle ex_top = new java.awt.Rectangle(_x, _y - size*(i + 1), size, size);
+            Rectangle ex_top = new Rectangle(_x, _y - size*(i + 1), size, size);
             if (isCollisionsWall(ex_top)) {
                 top = i;
                 return;
@@ -130,7 +130,7 @@ public class explosion extends Entity {
 
     private void Down() {
         for (int i = 0; i < power; i++) {
-            java.awt.Rectangle ex_right = new java.awt.Rectangle(_x, _y + size*(i + 1), size, size);
+            Rectangle ex_right = new Rectangle(_x, _y + size*(i + 1), size, size);
             if (isCollisionsWall(ex_right)) {
                 down = i;
                 return;
@@ -138,9 +138,9 @@ public class explosion extends Entity {
             down = i + 1;
         }
     }
-    private static boolean isCollisionsWall(java.awt.Rectangle r){
+    private static boolean isCollisionsWall(Rectangle r){
         for(Entity e : BombermanGame.stillObjects){
-            java.awt.Rectangle r2 = e.getRec();
+            Rectangle r2 = e.getRec();
             if(r.intersects(r2)){
                 if(e instanceof Wall)
                     return true;

@@ -1,5 +1,7 @@
 package bomberman.entities;
 
+import bomberman.entities.bomb.Bomb;
+import bomberman.entities.bomb.explosion;
 import bomberman.entities.tile.Grass;
 import bomberman.graphics.Sprite;
 import javafx.scene.image.Image;
@@ -9,6 +11,7 @@ import javafx.scene.input.KeyEvent;
 
 import java.awt.*;
 
+import static bomberman.BombermanGame.entities;
 import static bomberman.BombermanGame.stillObjects;
 
 public class Bomber extends Move {
@@ -16,13 +19,7 @@ public class Bomber extends Move {
     KeyCode key;
     public Bomber(int x, int y, Image img) {
         super( x, y, img);
-        setSpeed(5);
-    }
-
-    @Override
-    public Rectangle getRec() {
-        this.rec.setRect(new Rectangle(_x, _y, 25, 25));
-        return this.rec;
+        setSpeed(2);
     }
 
     @Override
@@ -53,7 +50,7 @@ public class Bomber extends Move {
 
     //load anh di chuyen.
     public void move(KeyEvent event) {
-        if(event.getCode() == KeyCode.RIGHT) {
+        if(        event.getCode() == KeyCode.RIGHT) {
             img = Sprite.movingSprite(Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2, right++, 60).getFxImage();
         }
         if(event.getCode() == KeyCode.LEFT) {
@@ -66,15 +63,12 @@ public class Bomber extends Move {
             img = Sprite.movingSprite(Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2, down++, 60).getFxImage();
         }
     }
-    /*public boolean collision() {
-        Rectangle rectangle = new Rectangle(tempX, tempY,26,26);
-        for (Entity x:stillObjects) {
-            if (!(x instanceof Grass)) {
-                if (rectangle.intersects(x.getRec())) {
-                    return false;
-                }
-            }
+
+    public void bom(KeyEvent event) {
+        if(event.getCode() == KeyCode.SPACE) {
+            Bomb bomb = new Bomb(_x, _y);
+            entities.add(bomb);
         }
-        return true;
-    }*/
+    }
+
 }
