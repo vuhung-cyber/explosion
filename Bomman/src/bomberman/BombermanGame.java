@@ -12,13 +12,17 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.AnchorPane;
 
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import bomberman.entities.*;
 import bomberman.graphics.Sprite;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -40,14 +44,14 @@ public class BombermanGame extends Application {
     public static List<Entity> explosionList = new ArrayList<>();
     public static List<Entity> entities = new ArrayList<>();
     public static List<Entity> stillObjects = new ArrayList<>();
+    public static List<Enemy>enemies = new ArrayList<>();  // danh sach cac Enemy
+
     private final static File map = new File("map.txt");
     private Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
-
     private Balloon balloon = new Balloon(25, 7, Sprite.balloon_left1.getFxImage());
     private Oneal oneal = new Oneal(5, 7, Sprite.oneal_left1.getFxImage(), bomberman);
 
-    public static List<Enemy>enemies = new ArrayList<>();  // danh sach cac Enemy
-
+    public boolean checkGameStart = false;
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -55,7 +59,14 @@ public class BombermanGame extends Application {
 
     @Override
     public void start(Stage stage) {
-
+        //tạo Label.// toa do và su kien.
+        Label labelStart = new Label("Hello");
+        labelStart.setLayoutX(50);
+        labelStart.setLayoutY(20);
+        labelStart.setOnMouseClicked(mouseEvent -> {
+            checkGameStart = true;
+            System.out.println(checkGameStart);
+        });
         // Tao Canvas
         canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();// cái cần phải vẽ.
@@ -63,25 +74,29 @@ public class BombermanGame extends Application {
         // Tao root container
         Group root = new Group();
         root.getChildren().add(canvas);
-
+        root.getChildren().add(labelStart);
         // Tao scene
         Scene scene = new Scene(root);
 
         // Them scene vao stage
         stage.setScene(scene);
         stage.show();
+
+        //create menu.
         enemies.add(balloon);
         enemies.add(oneal);
 
         entities.add(balloon);
         entities.add(oneal);
         AnimationTimer timer = new AnimationTimer() {
+
             @Override
             public void handle(long l) {
-
-                render();
-                update();
-                //collision();
+                if(checkGameStart) {
+                    render();
+                    update();
+                    labelStart.setVisible(false);
+                }
             }
         };
         timer.start();
@@ -90,12 +105,13 @@ public class BombermanGame extends Application {
 
         entities.add(bomberman);
 
-       scene.setOnKeyPressed(Event->{
+        scene.setOnKeyPressed(Event->{
             bomberman.move(Event);
             bomberman.moving(Event.getCode());
             bomberman.bom(Event);
         });
     }
+
 
     //tạo map chưa hoàn thiện, thiếu vật phẩm ẩn.
     public void createMap() {
