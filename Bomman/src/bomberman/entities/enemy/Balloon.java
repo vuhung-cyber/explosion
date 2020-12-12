@@ -1,15 +1,17 @@
 package bomberman.entities.enemy;
 
+import bomberman.entities.Move;
 import bomberman.graphics.Sprite;
 import javafx.scene.image.Image;
 
+import java.awt.*;
 import java.util.Random;
 
 // balloon di chuyển ngẫu nhiên di chuyển với vận tốc cố định
 
 public class Balloon extends Enemy {
 
-
+    public static int k = 0;
     protected int direction;
     public Balloon(int x, int y, Image img) {
         super(x, y, img);
@@ -18,39 +20,34 @@ public class Balloon extends Enemy {
     }
 
     @Override
-    public void update() {
+    public Rectangle getRec(){
+        this.rec = new Rectangle(_x, _y,25,25);
+        return this.rec;
+    }
 
+    @Override
+    public void update() {
+        if (k % 100 == 0) {
+            randomDirection();
+        }
          if (live) {
              if (direction == 0) {
                  moveLeft();
-                 if (collision()) {
-                     move();
-                 } else {
-                     randomDirection();
-                 }
+
              } else if (direction == 1) {
                  moveRight();
-                 if (collision()) {
-                     move();
-                 } else {
-                     randomDirection();
-                 }
              } else if (direction == 2) {
                  moveUp();
-                 if (collision()) {
-                     move();
-                 } else {
-                     randomDirection();
-                 }
              } else if (direction == 3) {
                  moveDown();
-                 if (collision()) {
-                     move();
-                 } else {
-                     randomDirection();
-                 }
+             }
+             if (collision() && Move.collisionBomb(this.getRec())) {
+                 move();
+             } else {
+                 randomDirection();
              }
          }
+         k++;
     }
 
     @Override

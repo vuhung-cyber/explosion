@@ -1,5 +1,6 @@
 package bomberman.entities;
 
+import bomberman.entities.bomb.Bomb;
 import bomberman.entities.tile.Grass;
 import bomberman.graphics.Sprite;
 import javafx.scene.Scene;
@@ -8,8 +9,7 @@ import javafx.scene.image.Image;
 import java.awt.*;
 import java.util.Random;
 
-import static bomberman.BombermanGame.entities;
-import static bomberman.BombermanGame.stillObjects;
+import static bomberman.BombermanGame.*;
 
 public class Move extends Entity {
     int tempX;
@@ -63,15 +63,23 @@ public class Move extends Entity {
         return true;
     }
 
-    public boolean collisionEnemy() {
-        for(Entity x : entities) {
-            if(x != entities.get(entities.size() - 1)) {
-                if(entities.get(entities.size() - 1).getRec().intersects(x.getRec())) {
-                    return true;
+    //vat 1 va cham vat 2;
+    public static boolean collisionEndGame(Rectangle r1, Rectangle r2) {
+        if(r1.intersects(r2)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean collisionBomb(Rectangle r) {
+        for(int i=0; i<entities.size(); i++) {
+            if(entities.get(i) instanceof Bomb) {
+                if(r.intersects(entities.get(i).getRec())) {
+                    return false;
                 }
             }
         }
-        return false;
+        return true;
     }
 
     public void move() {

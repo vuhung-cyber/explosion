@@ -2,6 +2,7 @@ package bomberman.entities.bomb;
 import java.util.List;
 import bomberman.BombermanGame;
 import bomberman.entities.Entity;
+import bomberman.entities.Sound;
 import bomberman.entities.tile.Wall;
 import bomberman.graphics.Sprite;
 import javafx.scene.image.Image;
@@ -16,6 +17,12 @@ public class explosion extends Entity {
     private int size = Sprite.SCALED_SIZE;
     private int direction;
     private int time = 0;
+
+    @Override
+    public Rectangle getRec() {
+        this.rec = new Rectangle(_x, _y,25,25);
+        return this.rec;
+    }
 
     public explosion(int x, int y, Image image, int direction){
         super(x, y);
@@ -32,8 +39,9 @@ public class explosion extends Entity {
         if(time < 20){
             time++;
             setImg();
-        }else
+        }else {
             BombermanGame.explosionList.remove(this);
+        }
     }
 
     public void render_explosion(){
@@ -41,6 +49,9 @@ public class explosion extends Entity {
         Left();
         Top();
         Down();
+        Sound.explosion.play();
+        Sound.explosion.seek(Sound.explosion.getStartTime()); // thực hiện trong mỗi lần ấn bom
+
         creat_explosion();
     }
 
@@ -139,6 +150,7 @@ public class explosion extends Entity {
         }
     }
     private static boolean isCollisionsWall(Rectangle r){
+        r.setRect(r.x,r.y,25, 25);
         for(Entity e : BombermanGame.stillObjects){
             Rectangle r2 = e.getRec();
             if(r.intersects(r2)){

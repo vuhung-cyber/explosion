@@ -39,6 +39,7 @@ public class BombermanGame extends Application {
     private static int countDown = 1;*/
     //private boolean collision = false;
 
+
     private GraphicsContext gc;
     private Canvas canvas;
     public static List<Entity> explosionList = new ArrayList<>();
@@ -49,7 +50,11 @@ public class BombermanGame extends Application {
     private final static File map = new File("map.txt");
     private Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
     private Balloon balloon = new Balloon(25, 7, Sprite.balloon_left1.getFxImage());
-    private Oneal oneal = new Oneal(5, 7, Sprite.oneal_left1.getFxImage(), bomberman);
+    //private Balloon balloon1 = new Balloon(28, 7, Sprite.balloon_left1.getFxImage());
+   // private Balloon balloon2 = new Balloon(25, 9, Sprite.balloon_left1.getFxImage());
+    private Oneal oneal = new Oneal(10, 5, Sprite.oneal_left1.getFxImage(), bomberman);
+    private Oneal oneal1 = new Oneal(15, 9, Sprite.oneal_left1.getFxImage(), bomberman);
+    private Oneal oneal2 = new Oneal(7, 7, Sprite.oneal_left1.getFxImage(), bomberman);
 
     public boolean checkGameStart = false;
 
@@ -59,6 +64,10 @@ public class BombermanGame extends Application {
 
     @Override
     public void start(Stage stage) {
+        // gọi âm thanh background
+        Sound.bomberman.play();
+
+
         //tạo Label.// toa do và su kien.
         Label labelStart = new Label("Hello");
         labelStart.setLayoutX(50);
@@ -83,11 +92,17 @@ public class BombermanGame extends Application {
         stage.show();
 
         //create menu.
-        enemies.add(balloon);
-        enemies.add(oneal);
+        //enemies.add(balloon);
+
+        //enemies.add(oneal);
+        //enemies.add(oneal1);
+        //enemies.add(oneal2);
 
         entities.add(balloon);
+
         entities.add(oneal);
+        entities.add(oneal1);
+        entities.add(oneal2);
         AnimationTimer timer = new AnimationTimer() {
 
             @Override
@@ -106,7 +121,7 @@ public class BombermanGame extends Application {
         entities.add(bomberman);
 
         scene.setOnKeyPressed(Event->{
-            bomberman.move(Event);
+            //bomberman.move(Event);
             bomberman.moving(Event.getCode());
             bomberman.bom(Event);
         });
@@ -146,6 +161,9 @@ public class BombermanGame extends Application {
     }
 
     public void update() {
+        for(int i=0; i<stillObjects.size(); i++) {
+            stillObjects.get(i).update();
+        }
 
         for(int i = 0; i < entities.size(); i++)
             entities.get(i).update();
