@@ -78,6 +78,12 @@ public class Bomber extends Move {
 
     @Override
     public void update() {
+        if(Move.collisnEnemy(this.getRec())) {
+            live = false;
+            img = Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2
+                    , Sprite.player_dead3,10, 30).getFxImage();
+            setSpeed(0);
+        }
         collisionEnemy();
         if (!live) {
             img = Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2
@@ -119,16 +125,6 @@ public class Bomber extends Move {
         img = Sprite.movingSprite(Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2, down++, 30).getFxImage();
     }
    public void collisionEnemy() {
-       Rectangle rectangle = this.getRec();
-       for (Enemy enemy : enemies) {
-           Rectangle r2 = enemy.getRec();
-           if (rectangle.intersects(r2)) {
-               //Sound.die.play();
-               //Sound.die.seek(Sound.die.getStartTime());
-               live = false;
-           }
-       }
-
        for (int i=0; i<explosionList.size(); i++) {
            if(Move.collisionEndGame(this.getRec(), explosionList.get(i).getRec())) {
                this.live = false;

@@ -82,6 +82,17 @@ public class Move extends Entity {
         return true;
     }
 
+    public static boolean collisnEnemy(Rectangle r) {
+        for(Entity x : entities) {
+            if(!(x instanceof Bomber) && !(x instanceof Bomb)) {
+                if(r.intersects(x.getRec())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public void move() {
         _x = tempX;
         _y = tempY;

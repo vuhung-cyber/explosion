@@ -1,5 +1,6 @@
 package bomberman;
 
+import bomberman.entities.Item.Win;
 import bomberman.entities.enemy.Enemy;
 import bomberman.entities.tile.Grass;
 import bomberman.entities.tile.Wall;
@@ -48,7 +49,7 @@ public class BombermanGame extends Application {
     public static List<Enemy>enemies = new ArrayList<>();  // danh sach cac Enemy
 
     private final static File map = new File("map.txt");
-    private Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
+    public Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
     private Balloon balloon = new Balloon(25, 7, Sprite.balloon_left1.getFxImage());
     //private Balloon balloon1 = new Balloon(28, 7, Sprite.balloon_left1.getFxImage());
    // private Balloon balloon2 = new Balloon(25, 9, Sprite.balloon_left1.getFxImage());
@@ -148,6 +149,12 @@ public class BombermanGame extends Application {
                         object = new Grass(j, i, Sprite.grass.getFxImage());
                     }
                     else if (line.charAt(j) == '*') {
+                        object = new Grass(j, i, Sprite.grass.getFxImage());
+                        stillObjects.add(object);
+                        if(j == 7 && i == i) {
+                            object = new Win(j, i, Sprite.portal.getFxImage());
+                            stillObjects.add(object);
+                        }
                         object = new Brick(j, i, Sprite.brick.getFxImage());
                     } else {
                         object = new Grass(j, i, Sprite.grass.getFxImage());
@@ -170,6 +177,8 @@ public class BombermanGame extends Application {
 
         for(int i = 0; i < explosionList.size(); i++)
             explosionList.get(i).update();
+
+
     }
 
     public void render() {
